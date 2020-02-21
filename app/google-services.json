@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "152602811108",
+    "firebase_url": "https://weusapp-ac170.firebaseio.com",
+    "project_id": "weusapp-ac170",
+    "storage_bucket": "weusapp-ac170.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152602811108:android:30b3284e6341a86132eaf1",
+        "android_client_info": {
+          "package_name": "com.example.we_us_n_our_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152602811108-ug8qbhbvh015bv8j94na5i8nkmver186.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.we_us_n_our_app",
+            "certificate_hash": "e716b36d077168a1beeae83b00fe4c37fb097fbf"
+          }
+        },
+        {
+          "client_id": "152602811108-ae3kgnohtm41fpr10n24h9g5dtmllb42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQjaivN6npdOxx193ZOffVGW0rapWBWWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152602811108-ae3kgnohtm41fpr10n24h9g5dtmllb42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
