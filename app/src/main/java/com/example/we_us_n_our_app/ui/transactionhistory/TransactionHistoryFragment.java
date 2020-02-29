@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TransactionHistoryFragment extends Fragment {
@@ -53,6 +54,11 @@ public class TransactionHistoryFragment extends Fragment {
         tr=new Transactions();
 
         final ListView listView=(ListView)root.findViewById(R.id.listViewTransactionHistory);
+        TextView textView = new TextView(getContext());
+        textView.setText("Amount      Date");
+        textView.setTextSize(30);
+
+        listView.addHeaderView(textView);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,6 +69,7 @@ public class TransactionHistoryFragment extends Fragment {
                     list.add(tr.getAmount().toString()+"             "+tr.getDate().toString());
 
                 }
+                Collections.reverse(list);
                 listView.setAdapter(adapter);
             }
 

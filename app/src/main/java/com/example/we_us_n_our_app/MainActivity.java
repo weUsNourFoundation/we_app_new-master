@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
 
             //and open profile activity
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
         }
 
         //initializing views
