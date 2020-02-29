@@ -5,30 +5,11 @@
 
 
     <TextView
-        android:id="@+id/TextFirst"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="First"/>
-
-    <TextView
-        android:id="@+id/TextSecond"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="2"
-        android:text="Second"/>
-    <TextView
-        android:id="@+id/TextThird"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="Third"/>
-    <TextView
-        android:id="@+id/TextFourth"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="Fourth"/>
+        android:id="@+id/transactionInfo"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

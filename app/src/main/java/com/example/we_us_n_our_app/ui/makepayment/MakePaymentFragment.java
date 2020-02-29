@@ -126,6 +126,7 @@ public class MakePaymentFragment extends Fragment {
     public void showAlertDialogButtonClicked(View view, String amt, String dt) {
         final String amount=new String(amt);
         final String date=new String(dt);
+
         // setup the alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Your Payment Details");
@@ -138,17 +139,19 @@ public class MakePaymentFragment extends Fragment {
 
                         // User clicked the Yes button
                         String uid=firebaseAuth.getCurrentUser().getUid();
+                        String tid= new String(uid+amount+date);
                         Transactions transaction=new Transactions(amount,date,uid);
-                        Map map=new HashMap();
-                        map.put("amount",amount);
-                        map.put("date",date);
-                        map.put("Uid",uid);
+//                        Map map=new HashMap();
+//                        map.put("amount",amount);
+//                        map.put("date",date);
+//                        map.put("Uid",uid);
+//                        map.put("Tid", tid);
 
 
 
 
                         myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                .push().setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){

@@ -55,4 +55,6 @@
     <string name="payment_amount">Enter Payment Amount</string>
     <string name="payment_date">Enter Payment Date</string>
     <string name="joining_date">Enter Joining Date</string>
+    <string name="date">Date</string>
+    <string name="amount">Amount</string>
 </resources>
