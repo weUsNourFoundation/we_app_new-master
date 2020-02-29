@@ -40,6 +40,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="action_add_post_head">Add post</string>
+    <string name="action_add_headline">Enter Headline of the Post</string>
+    <string name="action_add_content">Enter Main content</string>
+    <string name="action_upload_image">Select Image</string>
+    <string name="action_add_post">Upload Post</string>
     <string name="menu_home">Home</string>
     <string name="menu_make_payment">Make Payment</string>
     <string name="menu_transaction_history">Transaction History</string>
