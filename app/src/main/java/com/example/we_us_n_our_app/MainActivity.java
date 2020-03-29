@@ -2,10 +2,21 @@ package com.example.we_us_n_our_app;
 
 
 import com.example.we_us_n_our_app.User;
+
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -20,24 +31,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //defining view objects
     DatePickerDialog picker;
     private EditText editTextName;
@@ -47,28 +64,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonSignup;
     private TextView textViewSignin;
     private ProgressDialog progressDialog;
+    private String loc;
 
 
     //defining firebaseauth object
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //initializing firebase auth object
-        firebaseAuth = FirebaseAuth.getInstance();
 
-        //if getCurrentUser does not returns null
-        if(firebaseAuth.getCurrentUser() != null){
-            //that means user is already logged in
-            //so close this activity
-            finish();
-
-            //and open profile activity
-            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
-        }
 
         //initializing views
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -106,8 +114,105 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //attaching listener to button
         buttonSignup.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                            PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+            }
+        }
+
+
+        //initializing firebase auth object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //if getCurrentUser does not returns null
+        if(firebaseAuth.getCurrentUser() != null){
+            //that means user is already logged in
+            //so close this activity
+            finish();
+
+            //and open profile activity
+            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+        }
+
+
     }
 
+
+    private void getLocation(){
+        /********** Location Start *********/
+
+        double longitude, latitude;
+        LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        assert locManager != null;
+        boolean network_enabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Location location;
+
+        if (network_enabled) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            1);
+                }
+            }
+            location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if(location!=null){
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+//                Toast.makeText(MainActivity.this, "Location :" + longitude+latitude, Toast.LENGTH_LONG).show();
+                Log.i("sanchit","Location :" + longitude+" "+latitude);
+                Geocoder gcd = new Geocoder(this, Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = gcd.getFromLocation(latitude, longitude, 1);
+                    if (addresses.size() > 0) {
+
+                        String city = addresses.get(0).getLocality();
+                        Log.i("sanchit",city);
+                        Toast.makeText(MainActivity.this, city, Toast.LENGTH_LONG).show();
+                        loc= city;
+                    }
+                    else {
+                        // do your stuff
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        else{
+            Toast.makeText(MainActivity.this, "Please Switch on your GPS", Toast.LENGTH_LONG).show();
+            getLocation();
+
+        }
+
+/********** Location Start *********/
+    }
     private void registerUser(){
 
         //getting email and password from edit texts
@@ -141,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
+        getLocation();
+
         //creating a new user
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -152,23 +259,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //checking if success
                         if(task.isSuccessful()){
                             Log.i("Hey Entered issuccess","");
-                            User user= new User(name,joiningdate,email);
-                            Map map=new HashMap();
-                            map.put("name",name);
-                            map.put("joining date",joiningdate);
-                            map.put("email",email);
-                            //map.put("uid",uid);
+                            User user= new User(name,joiningdate,email,loc);
+//                            Map map=new HashMap();
+//                            map.put("name",name);
+//                            map.put("joining date",joiningdate);
+//                            map.put("email",email);
+//                            map.put("uid",uid);
                             database=FirebaseDatabase.getInstance();
 
                             myRef=database.getReference("Users");
 
                             myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
                                         Toast.makeText(MainActivity.this,"Registration Successful",Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                                        startActivity(new Intent(getApplicationContext(),MenuActivity.class));
                                     }
                                     else{
                                         Toast.makeText(MainActivity.this,"Registration Error",Toast.LENGTH_LONG).show();
@@ -195,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         if(view == buttonSignup){
+
             registerUser();
         }
 

@@ -55,7 +55,7 @@ public class TransactionHistoryFragment extends Fragment {
 
         final ListView listView=(ListView)root.findViewById(R.id.listViewTransactionHistory);
         TextView textView = new TextView(getContext());
-        textView.setText("Amount      Date");
+        textView.setText("    Amount           Date");
         textView.setTextSize(30);
 
         listView.addHeaderView(textView);
@@ -66,7 +66,7 @@ public class TransactionHistoryFragment extends Fragment {
                 for(DataSnapshot ds: dataSnapshot.getChildren())
                 {
                     tr= ds.getValue(Transactions.class);
-                    list.add(tr.getAmount().toString()+"             "+tr.getDate().toString());
+                    list.add("       "+tr.getAmount().toString()+"             "+tr.getDate().toString());
 
                 }
                 Collections.reverse(list);

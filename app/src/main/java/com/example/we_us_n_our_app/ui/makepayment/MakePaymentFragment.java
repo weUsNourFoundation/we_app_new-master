@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.we_us_n_our_app.MenuActivity;
 import com.example.we_us_n_our_app.ProfileActivity;
 import com.example.we_us_n_our_app.R;
 import com.example.we_us_n_our_app.Transaction;
@@ -156,7 +157,7 @@ public class MakePaymentFragment extends Fragment {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(getActivity(),"Transaction Successful",Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(getContext(), ProfileActivity.class));
+                                    startActivity(new Intent(getContext(), MenuActivity.class));
                                 }
                                 else{
                                     Toast.makeText(getActivity(),"Transaction Error",Toast.LENGTH_LONG).show();
