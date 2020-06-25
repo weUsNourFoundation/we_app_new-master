@@ -57,15 +57,38 @@ public class MenuActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private String email=new String("");
+    private String admin_mail=new String("weusnourfoundation@gmail.com");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        database= FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        myRef=database.getReference("Users").child(firebaseAuth.getCurrentUser().getUid());
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if(admin_mail==user.getEmail()){
+            setContentView(R.layout.activity_admin_menu);
+            Toast.makeText(this, "In admin", Toast.LENGTH_LONG).show();
+
+        }
+        else{
+            setContentView(R.layout.activity_menu);
+            Toast.makeText(this, "In user", Toast.LENGTH_LONG).show();
+        }
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+
+
+        //email=user.getEmail();
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,14 +103,25 @@ public class MenuActivity extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_make_payment, R.id.nav_transaction_history,
-                R.id.nav_about, R.id.nav_share)
-                .setDrawerLayout(drawer)
-                .build();
+        if(admin_mail==user.getEmail()){
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home, R.id.nav_transaction_history,
+                    R.id.nav_about, R.id.nav_share)
+                    .setDrawerLayout(drawer)
+                    .build();
+
+        }
+        else {
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home, R.id.nav_make_payment, R.id.nav_transaction_history,
+                    R.id.nav_about, R.id.nav_share)
+                    .setDrawerLayout(drawer)
+                    .build();
+        }
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
     }
 
     @Override

@@ -66,7 +66,7 @@ public class MakePaymentFragment extends Fragment {
                 ViewModelProviders.of(this).get(MakePaymentViewModel.class);
         View root = inflater.inflate(R.layout.fragment_make_payment, container, false);
         database= FirebaseDatabase.getInstance();
-        myRef=database.getReference("Transactions");
+        myRef=database.getReference("Pending Transactions");
         firebaseAuth = FirebaseAuth.getInstance();
         editTextDate=(EditText) root.findViewById(R.id.editTextPaymentDate);
         editTextAmount=(EditText) root.findViewById(R.id.editTextPaymentAmount);
